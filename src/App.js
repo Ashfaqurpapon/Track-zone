@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
-
+import LocalClock from "./components/local-clock";
+import ClockList from "./components/clock-list";
+import useClock from "./hooks/useClock";
+import ClockDisplay from "./components/shared/clock-display";
+import { useState } from "react";
+const LOCAL_CLOCK_INIT = {
+  title: 'my clock',
+  timezone: '',
+  offset: 0,
+  date: null,
+};
 function App() {
+
+  const [localClock, setLocalClock] = useState({ ...LOCAL_CLOCK_INIT });
+
+  const updateLocalClock=(date)=>{
+    setLocalClock({...localClock, ...date});
+  }
+
+
+
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <LocalClock clock={localClock} updateClock={updateLocalClock} />
+      <ClockList />
+
     </div>
   );
 }
