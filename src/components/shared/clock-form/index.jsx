@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { getOffset } from "../../../utils/timezone";
+import { TIMEZONE_OFFSET } from "../../../constants/timezone";
 
-const ClockForm = ({ values, handleClock, title = true, edit = false }) => {
+const ClockForm = ({ values={title:'',timezone:'UTC',offset:0}, 
+    handleClock, title = true, edit = false }) => {
 
     const [formValues, setFormValues] = useState({ ...values });
 
@@ -13,12 +15,22 @@ const ClockForm = ({ values, handleClock, title = true, edit = false }) => {
 
     // };
 
+
+    useEffect(()=>{
+        if(TIMEZONE_OFFSET[formValues.timezone]){
+            setFormValues((prev)=>({
+                ...prev,
+                offset:TIMEZONE_OFFSET[formValues.timezone],
+            }));
+        }
+    },[formValues.timezone]);
+
     const handleChange = (e) => {
         let { name, value } = e.target
         if (name === 'offset') { value = Number(value) * 60 }
-        setFormValues((prev)=>({
+        setFormValues((prev) => ({
             ...prev,
-            [name]:value,
+            [name]: value,
 
         }));
     }
@@ -38,7 +50,15 @@ const ClockForm = ({ values, handleClock, title = true, edit = false }) => {
             </div>
             <div>
                 <label htmlFor='timezone'>enter timezone</label>
-                <input type='text' name='timezone' id='timezone' value={formValues.timezone} onChange={handleChange} />
+                <select id='timezone' name="timezone" value={formValues.timezone} onChange={handleChange}>
+                    <option value="GMT">GMT</option>
+                    <option value="UTC">UTC</option>
+                    <option value="PST">PST</option>
+                    <option value="EST">EST</option>
+                    <option value="FDT">FDT</option>
+                    <option value="UST">UST</option>
+                    <option value="MST">MST</option>
+                </select>
 
             </div>
             {(formValues.timezone === 'GMT' ||
@@ -59,7 +79,7 @@ const ClockForm = ({ values, handleClock, title = true, edit = false }) => {
                         </select>
                     </div>
                 )}
-           
+
             <button>{edit ? 'Update' : 'Create'}</button>
         </form>
     );

@@ -2,41 +2,77 @@ import { useState } from "react";
 import ClockForm from "../clock-form";
 
 
-const defaultOffset = [
-  -11.50,
-  -11,
-  -10.50,
-  -10
-  - 9.50,
-  -9,
-  -8.50,
-  -8,
-  0, 1, 2, 3, 4, 5, 5.5, 6, 6.5,
 
-];
 
 const ClockActions = ({ local = false, clock, updateClock }) => {
   const [isEdit, setIsEdit] = useState(false);
+  const [isCreate, setIsCreate] = useState(false);
+
+
+const handleClock =(values)=>{
+  console.log(values);
+}
+
 
 
   return (
     <div>
       <button onClick={() => setIsEdit(!isEdit)}>Edit</button>
-      {local ? <button>Create</button> : <button>Delete</button>}
+      {local ? (<button onClick={() => setIsCreate(!isCreate)}>Create</button>
+      ) : (
+        <button>Delete</button>
+      )}
       {isEdit && (
-        <ClockForm
-          value={clock}
-          handleClock={updateClock}
-          title={!local}
-          edit={true}
-
+        <>
+        <h3>Edit Clock</h3>
+          <ClockForm
+            value={clock}
+            handleClock={updateClock}
+            title={!local}
+            edit={true}
         />
+        </>
+
+      )}
+      {isCreate && (
+        <>
+        <h3>creat a new Clock</h3>
+          <ClockForm
+            handleClock={handleClock}
+        />
+        </>
 
       )}
     </div>
   );
 };
 export default ClockActions;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // export default ClockActions;
 // const handleChange =(e)=>{
 //   let {name,value}=e.target
